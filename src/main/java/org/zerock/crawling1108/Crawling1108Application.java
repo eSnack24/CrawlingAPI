@@ -1,4 +1,4 @@
-package org.zerock.crawlingdemo;
+package org.zerock.crawling1108;
 
 import lombok.extern.log4j.Log4j2;
 import org.jsoup.nodes.Element;
