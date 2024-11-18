@@ -22,7 +22,7 @@ import java.util.UUID;
 @Log4j2
 public class CrawlingSample {
     private static WebDriver driver;
-    private static String url = "https://brand.nongshim.com/all_product/index?catCd=B00";
+    private static String url = "https://www.orionworld.com/goods/list/27?category=0102";
     private static BufferedWriter writer;
 
     public static void main(String[] args) throws Exception {
@@ -32,7 +32,7 @@ public class CrawlingSample {
         driver = new ChromeDriver();
 
         // 메모장 파일을 열고 BufferedWriter 초기화
-        File file = new File("C:\\snack\\nongshim\\product_inserts.txt");
+        File file = new File("C:\\snack\\orion\\product_inserts.txt");
         if (!file.exists()) {
             file.createNewFile();
         }
@@ -59,12 +59,12 @@ public class CrawlingSample {
         List<String> imageUrls = new ArrayList<>();
 
         // 페이지에서 모든 이미지 태그를 찾기
-        List<WebElement> images = driver.findElements(By.cssSelector(".contlist img"));
+        List<WebElement> images = driver.findElements(By.cssSelector(".list-wrap img"));
 
         // 각 이미지의 정보를 처리
         for (WebElement image : images) {
             String imgSrc = image.getAttribute("src");  // 이미지의 src 속성 값 (URL) 추출
-            String imgalt = image.getAttribute("alt");  // 이미지의 alt 속성 값 (제품명)
+            String imgalt = image.getAttribute("h8");  // 이미지의 alt 속성 값 (제품명)
 
             // SQL 구문을 메모장에 기록
 
@@ -78,8 +78,8 @@ public class CrawlingSample {
                 String fileName = UUID.randomUUID().toString() + "_" + imgSrc.substring(imgSrc.lastIndexOf("/") + 1);
                 log.info("Saving image with filename: " + fileName);
 
-                if (imgalt != null && !imgalt.isEmpty()) {
-                    String insertSQL = "insert into product (ptitle, pcontent, price, pfilename) values ('" + imgalt + "', 'pcontent', 4000, '" +fileName+"');";
+                if (true) {
+                    String insertSQL = "insert into Product (ptitle, pcontent, price, pfilename, pcategory_ko) values ('" + imgalt + "', 'pcontent', 4000, '" +fileName+"', 'snack');";
                     writer.write(insertSQL);
                     writer.newLine();  // 줄바꿈 추가
                 }
@@ -89,7 +89,7 @@ public class CrawlingSample {
                 urlConnection.setRequestProperty("User-Agent", "Mozilla/5.0 (Linux; Android 8.0.0; SM-G955U Build/R16NW) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/116.0.0.0 Mobile Safari/537.36");
 
                 InputStream inputStream = urlConnection.getInputStream();
-                OutputStream outputStream = new FileOutputStream("C:\\snack\\nongshim\\" + fileName); // 이미지 파일 저장
+                OutputStream outputStream = new FileOutputStream("C:\\snack\\orion\\" + fileName); // 이미지 파일 저장
 
                 byte[] buffer = new byte[1024 * 8]; // buffer를 통해 가져오기
                 while (true) {
